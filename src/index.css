@@ -1,0 +1,274 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Pretendard", sans-serif;
+  background: #f7f7f9;
+  color: #222;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.topbar {
+  padding: 24px 0;
+  border-bottom: 1px solid #e5e5ea;
+  margin-bottom: 24px;
+}
+
+.topbar .logo {
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #222;
+}
+
+.content {
+  padding-bottom: 80px;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.button,
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #d1d1d6;
+  background: #fff;
+  color: #222;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.button:hover,
+button:hover {
+  background: #f2f2f7;
+}
+
+button[type="submit"] {
+  background: #0a84ff;
+  border-color: #0a84ff;
+  color: #fff;
+}
+
+button[type="submit"]:hover {
+  background: #0070e0;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-list li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #222;
+}
+
+.post-list .thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.post-list .title {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.post-list li a:hover {
+  border-color: #0a84ff;
+}
+
+.post-list .meta {
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.post-detail {
+  background: #fff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.post-detail .meta {
+  color: #8e8e93;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.post-detail .content {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.back-link {
+  color: #0a84ff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.post-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.post-form input,
+.post-form textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff;
+}
+
+.post-form textarea {
+  resize: vertical;
+}
+
+.post-form input[type="file"] {
+  padding: 8px;
+  font-size: 13px;
+  background: #fafafa;
+}
+
+.image-previews,
+.image-gallery {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.image-previews li,
+.image-gallery li {
+  position: relative;
+}
+
+.image-previews img,
+.image-gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e5ea;
+  display: block;
+}
+
+.preview-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border: 0;
+  font-size: 13px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.preview-remove:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.post-detail-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-detail-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.button.danger,
+button.danger {
+  background: #ff3b30;
+  border-color: #ff3b30;
+  color: #fff;
+}
+
+.button.danger:hover,
+button.danger:hover {
+  background: #d70015;
+}
+
+.error {
+  color: #d1453b;
+}
+
+.empty {
+  color: #8e8e93;
+  text-align: center;
+  padding: 32px 0;
+}

@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// posts/ 경로 아래의 이미지 파일에 대한 룰입니다.
+// 인증 없이 운영하는 환경 — 형태(파일 타입/크기) 검증으로만 보호합니다.
+// 누구나 업로드 가능하므로 스팸/악성 파일에는 여전히 취약합니다.
+// 실서비스로 가려면 Firebase Authentication 도입을 권장합니다.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /posts/{fileName} {
+      // 읽기는 누구에게나 허용 (게시글 이미지를 모두가 볼 수 있어야 하므로)
+      allow read: if true;
+
+      // 업로드: 이미지 + 5MB 이하만 허용
+      allow write: if
+        request.resource != null
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

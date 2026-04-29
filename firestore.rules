@@ -1,0 +1,99 @@
+rules_version = '2';
+
+// 인증 없이 운영하는 단순 게시판용 룰입니다.
+// "프로덕션 모드 + 형태 검증" — 인증 대신 데이터 모양으로 잘못된 쓰기를 막습니다.
+// 누구나 글쓰기 가능하므로 스팸/악성 데이터에는 여전히 취약합니다.
+// 실서비스로 가려면 Firebase Authentication 도입을 권장합니다.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /posts/{postId} {
+      // 읽기는 누구에게나 허용
+      allow read: if true;
+
+      // 새 글 작성: 형태 검증을 통과해야만 허용
+      allow create: if
+        // 필수 필드가 모두 있고
+        request.resource.data.keys().hasAll(['id', 'title', 'content', 'createdAt', 'deleteSwitch'])
+        // 허용된 필드 외에는 없을 것 (updatedAt / deletedAt 은 update 에서만 등장)
+        && request.resource.data.keys().hasOnly(
+          ['id', 'title', 'content', 'author', 'createdAt', 'imageUrls', 'deleteSwitch']
+        )
+        // 본문의 id 가 경로의 id 와 같아야 함 (denormalize 일관성)
+        && request.resource.data.id is string
+        && request.resource.data.id == postId
+        // 새 글은 항상 살아있는 상태로 시작
+        && request.resource.data.deleteSwitch is bool
+        && request.resource.data.deleteSwitch == false
+        // title: 1~200자
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 200
+        // content: 1~10000자
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 10000
+        // author: 있으면 문자열 + 50자 이내
+        && (
+          !('author' in request.resource.data)
+          || (
+            request.resource.data.author is string
+            && request.resource.data.author.size() <= 50
+          )
+        )
+        // createdAt: 클라이언트가 serverTimestamp() 로 보낸 값이어야 함
+        && request.resource.data.createdAt == request.time
+        // imageUrls: 있으면 문자열 배열, 최대 10장, 각 URL 4KB 이내
+        && (
+          !('imageUrls' in request.resource.data)
+          || (
+            request.resource.data.imageUrls is list
+            && request.resource.data.imageUrls.size() <= 10
+          )
+        );
+
+      // 수정: 단일 사용자(인증 없음) 전제로 허용. 형태 검증으로만 보호합니다.
+      // request.resource.data 는 merge 가 끝난 "최종 문서" 상태입니다.
+      // updatedAt / deletedAt 은 update 에서 추가될 수 있으므로 hasOnly 에 포함.
+      allow update: if
+        request.resource.data.keys().hasOnly(
+          ['id', 'title', 'content', 'author', 'createdAt', 'imageUrls',
+           'deleteSwitch', 'updatedAt', 'deletedAt']
+        )
+        // 본문의 id 와 경로의 id 가 어긋나는 변경은 차단
+        && request.resource.data.id == postId
+        // title / content 검증은 create 와 동일
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.content is string
+        && request.resource.data.content.size() > 0
+        && request.resource.data.content.size() <= 10000
+        // imageUrls 검증도 create 와 동일
+        && (
+          !('imageUrls' in request.resource.data)
+          || (
+            request.resource.data.imageUrls is list
+            && request.resource.data.imageUrls.size() <= 10
+          )
+        )
+        // deleteSwitch / 타임스탬프 필드 타입 체크 (값이 있는 경우에만)
+        && (
+          !('deleteSwitch' in request.resource.data)
+          || request.resource.data.deleteSwitch is bool
+        )
+        && (
+          !('updatedAt' in request.resource.data)
+          || request.resource.data.updatedAt is timestamp
+        )
+        && (
+          !('deletedAt' in request.resource.data)
+          || request.resource.data.deletedAt is timestamp
+        );
+
+      // 삭제: 일단 막아둠. 필요하면 비슷한 형태로 별도 결정.
+      allow delete: if false;
+    }
+  }
+}

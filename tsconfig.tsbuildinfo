@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/types.ts","./src/hooks/usefirebasedb.ts","./src/lib/firebase.ts","./src/pages/postdetailpage.tsx","./src/pages/posteditpage.tsx","./src/pages/postlistpage.tsx","./src/pages/postwritepage.tsx","./vite.config.ts"],"version":"5.9.3"}
