@@ -4,6 +4,7 @@ import { serverTimestamp } from "firebase/firestore";
 import { updateAt, useReadDoc } from "../hooks/useFirebaseDb";
 import type { PostFields } from "../types";
 
+// 글 상세
 export default function PostDetailPage() {
   // URL 의 :id 부분을 가져옵니다 (예: /posts/abc123 → id === "abc123")
   const { id } = useParams<{ id: string }>();

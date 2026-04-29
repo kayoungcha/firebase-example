@@ -4,6 +4,7 @@ import { getStorage } from "firebase/storage";
 
 // .env 파일에서 값을 읽어옵니다.
 // Vite 는 VITE_ 로 시작하는 환경변수만 import.meta.env 로 노출시킵니다.
+// vite를 사용하지 않는 경우 환경 변수 prefix(VITE_)가 다를수 있으니 확인하세요!
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,

@@ -69,8 +69,7 @@ export function useReadDb<T extends DocumentData>(
 // ────────────────────────────────────────────────────────────
 // (col, field, value) 로 받아 `where(field, "==", value)` + `limit(1)` 로 한 건만 가져옵니다.
 // 예: useReadDoc<PostFields>("posts", "id", id)
-//     useReadDoc<PostFields>("posts", "author", "kayoung")
-// 다중 매치를 배열로 받고 싶으면 limit(1) 만 빼고 docs.map 으로 펼치면 됩니다.
+//     useReadDoc<PostFields>("posts", "title", "제목입니다")
 export function useReadDoc<T extends DocumentData>(
   collectionName: string,
   field: string,
@@ -129,14 +128,14 @@ export function useReadDoc<T extends DocumentData>(
 }
 
 // ────────────────────────────────────────────────────────────
-// 3) 통합 저장 — 새 문서 / 수정 / 소프트 삭제 모두 이 함수 하나로
+// 3) 저장 — 새 문서 업로드 / 수정
 // ────────────────────────────────────────────────────────────
 // 경로 segment 수로 동작이 결정됩니다.
 //   - 홀수 ("posts"):           새 문서 생성. id / createdAt 자동 주입, 생성된 docId 반환.
 //   - 짝수 ("posts/abc123"):    기존 문서 부분 갱신 (setDoc + merge). updatedAt 자동 주입.
 //
 // data 타입이 PartialWithFieldValue 라 serverTimestamp() 같은 FieldValue 도 그대로 넣을 수 있습니다.
-// 예) 소프트 삭제: updateAt(`posts/${id}`, { deleteSwitch: true, deletedAt: serverTimestamp() })
+// 예)  삭제: updateAt(`posts/${id}`, { deleteSwitch: true, deletedAt: serverTimestamp() })
 export async function updateAt<T extends DocumentData>(
   path: string,
   data: PartialWithFieldValue<Omit<T, "id" | "createdAt" | "updatedAt">>
@@ -147,7 +146,6 @@ export async function updateAt<T extends DocumentData>(
     throw new Error("path 가 비어 있습니다.");
   }
 
-  // PartialWithFieldValue 는 union 타입이라 직접 spread 가 막힘 — 한 번 좁혀줍니다.
   const payload = data as DocumentData;
 
   // 짝수: 특정 문서 갱신

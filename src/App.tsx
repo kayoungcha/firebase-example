@@ -5,6 +5,7 @@ import PostWritePage from "./pages/PostWritePage";
 import PostEditPage from "./pages/PostEditPage";
 
 export default function App() {
+  /*** 플렛폼의 layout */
   return (
     <div className="app">
       <header className="topbar">
@@ -14,6 +15,7 @@ export default function App() {
       </header>
 
       <main className="content">
+        {/* 페이지 라우터 url path  */}
         <Routes>
           <Route path="/" element={<PostListPage />} />
           <Route path="/posts/:id" element={<PostDetailPage />} />
