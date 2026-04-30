@@ -35,7 +35,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **라우팅 — [src/App.tsx](src/App.tsx)**
 
-`/` → 목록, `/posts/:id` → 상세, `/posts/:id/edit` → 수정, `/write` → 글쓰기. `BrowserRouter` 는 [src/main.tsx](src/main.tsx) 에서 마운트됩니다.
+`/` → 목록, `/posts/:id` → 상세, `/write` 와 `/posts/:id/edit` → 둘 다 [PostWritePage](src/pages/PostWritePage.tsx) (URL 의 `:id` 유무로 글쓰기 / 수정 모드 분기). `BrowserRouter` 는 [src/main.tsx](src/main.tsx) 에서 마운트됩니다.
 
 **스키마 — [src/types.ts](src/types.ts)**
 

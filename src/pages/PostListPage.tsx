@@ -7,12 +7,11 @@ export default function PostListPage() {
   const { data, loading, error } = useReadDb<PostFields>(
     "posts",
     "createdAt",
-    "desc"
+    "desc", //내림차순
   );
 
-  // 소프트 삭제된 글은 목록에서 숨깁니다.
+  // 삭제된 글은 목록에서 숨깁니다.
   // (서버 사이드 where("deleteSwitch", "==", false) + orderBy 조합은 컴포지트
-  //  인덱스가 필요해서 학습용 단계에선 클라이언트 필터로 처리)
   const posts = data.filter((p) => !p.deleteSwitch);
 
   return (
@@ -34,12 +33,9 @@ export default function PostListPage() {
         {posts.map((post) => (
           <li key={post.id}>
             <Link to={`/posts/${post.id}`}>
+                {/* image가 하나라도 있으면 가장 첫번째를 보여줌 */}
               {post.imageUrls && post.imageUrls.length > 0 && (
-                <img
-                  className="thumb"
-                  src={post.imageUrls[0]}
-                  alt=""
-                />
+                <img className="thumb" src={post.imageUrls[0]} alt="" />
               )}
               <span className="title">
                 <strong>{post.title}</strong>

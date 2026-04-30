@@ -69,7 +69,7 @@ export function useReadDb<T extends DocumentData>(
 // ────────────────────────────────────────────────────────────
 // (col, field, value) 로 받아 `where(field, "==", value)` + `limit(1)` 로 한 건만 가져옵니다.
 // 예: useReadDoc<PostFields>("posts", "id", id)
-//     useReadDoc<PostFields>("posts", "title", "제목입니다")
+//     useReadDoc<PostFields>("posts", "title", "제목입니다") -> 제목입니다 라는 제목을 가진 문서 limit1=> 1개만
 export function useReadDoc<T extends DocumentData>(
   collectionName: string,
   field: string,
@@ -133,12 +133,9 @@ export function useReadDoc<T extends DocumentData>(
 // 경로 segment 수로 동작이 결정됩니다.
 //   - 홀수 ("posts"):           새 문서 생성. id / createdAt 자동 주입, 생성된 docId 반환.
 //   - 짝수 ("posts/abc123"):    기존 문서 부분 갱신 (setDoc + merge). updatedAt 자동 주입.
-//
-// data 타입이 PartialWithFieldValue 라 serverTimestamp() 같은 FieldValue 도 그대로 넣을 수 있습니다.
-// 예)  삭제: updateAt(`posts/${id}`, { deleteSwitch: true, deletedAt: serverTimestamp() })
-export async function updateAt<T extends DocumentData>(
+export async function updateDoc<T extends DocumentData>(
   path: string,
-  data: PartialWithFieldValue<Omit<T, "id" | "createdAt" | "updatedAt">>
+  data: PartialWithFieldValue<Omit<T, "id" | "createdAt" | "updatedAt">>,
 ): Promise<string | void> {
   const segments = path.split("/").filter(Boolean);
 
@@ -153,7 +150,7 @@ export async function updateAt<T extends DocumentData>(
     await setDoc(
       doc(db, path),
       { ...payload, updatedAt: serverTimestamp() },
-      { merge: true }
+      { merge: true },
     );
     return;
   }

@@ -2,7 +2,6 @@ import { Link, Route, Routes } from "react-router-dom";
 import PostListPage from "./pages/PostListPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import PostWritePage from "./pages/PostWritePage";
-import PostEditPage from "./pages/PostEditPage";
 
 export default function App() {
   /*** 플렛폼의 layout */
@@ -19,7 +18,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<PostListPage />} />
           <Route path="/posts/:id" element={<PostDetailPage />} />
-          <Route path="/posts/:id/edit" element={<PostEditPage />} />
+          <Route path="/posts/:id/edit" element={<PostWritePage />} />
           <Route path="/write" element={<PostWritePage />} />
         </Routes>
       </main>

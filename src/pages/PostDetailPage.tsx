@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { serverTimestamp } from "firebase/firestore";
-import { updateAt, useReadDoc } from "../hooks/useFirebaseDb";
+import { updateDoc, useReadDoc } from "../hooks/useFirebaseDb";
 import type { PostFields } from "../types";
 
 // 글 상세
@@ -9,16 +9,21 @@ export default function PostDetailPage() {
   // URL 의 :id 부분을 가져옵니다 (예: /posts/abc123 → id === "abc123")
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data: post, loading, error } = useReadDoc<PostFields>("posts", "id", id);
+  const {
+    data: post,
+    loading,
+    error,
+  } = useReadDoc<PostFields>("posts", "id", id);
   const [deleting, setDeleting] = useState(false);
 
+  // 삭제 함수 deleteSwitch 상태를 변경해줍니다.
   async function handleDelete() {
     if (!post) return;
     if (!confirm("정말 삭제하시겠어요? 목록에서 즉시 사라집니다.")) return;
 
     setDeleting(true);
     try {
-      await updateAt<PostFields>(`posts/${post.id}`, {
+      await updateDoc<PostFields>(`posts/${post.id}`, {
         deleteSwitch: true,
         deletedAt: serverTimestamp(),
       });
@@ -59,6 +64,7 @@ export default function PostDetailPage() {
         </ul>
       )}
 
+      {/* button 부분 */}
       <div className="post-detail-actions">
         <Link to="/" className="back-link">
           ← 목록으로

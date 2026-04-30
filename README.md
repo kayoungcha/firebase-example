@@ -1,7 +1,7 @@
 # Firebase + Vite + React 게시판 예시
 
 Firebase Firestore + Cloud Storage 를 사용한 간단한 게시판 예시입니다.
-**목록 → 상세 → 글쓰기 → 수정** 네 화면이 들어 있습니다.
+**목록 → 상세 → 글쓰기/수정** 세 화면(폼은 글쓰기/수정 공유)이 들어 있습니다.
 
 ## 사용 기술
 
@@ -78,8 +78,7 @@ src/
 └── pages/
     ├── PostListPage.tsx   목록 (/)
     ├── PostDetailPage.tsx 상세 (/posts/:id)
-    ├── PostEditPage.tsx   수정 (/posts/:id/edit)
-    └── PostWritePage.tsx  글쓰기 (/write)
+    └── PostWritePage.tsx  글쓰기 (/write) + 수정 (/posts/:id/edit) 통합
 ```
 
 ---
